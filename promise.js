@@ -19,8 +19,12 @@ function Promise(executor) {
 		// 保存结果值
 		self.promiseResult = data
 	}
-
-	executor(resolve, reject);
+	// 使用抛出异常打断Promise执行的处理
+	try {
+		executor(resolve, reject);
+	} catch (e) {
+		reject(e)
+	}
 }
 
 Promise.prototype.then = function (onResolved, onRejected) {}
