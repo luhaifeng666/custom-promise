@@ -6,6 +6,8 @@ function Promise(executor) {
 	const self = this
 	// 定义resolve函数
 	function resolve (data) {
+		// 如果当前Promise的状态不是pending，则不执行以下逻辑
+		if (self.promiseState !== 'pending') return
 		// 修改Promise的状态
 		self.promiseState = 'fulfilled'
 		// 保存结果值
@@ -14,6 +16,8 @@ function Promise(executor) {
 
 	// 定义reject函数
 	function reject (data) {
+		// 如果当前Promise的状态不是pending，则不执行以下逻辑
+		if (self.promiseState !== 'pending') return
 		// 修改Promise的状态
 		self.promiseState = 'rejected'
 		// 保存结果值
