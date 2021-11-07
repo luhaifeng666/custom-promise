@@ -5,14 +5,14 @@
     <title>Promise test</title>
     <script>
         const p = new Promise((resolve, reject) => {
-            resolve('ok')
+            // resolve('ok') // 状态为fulfilled
+            // reject('error') // 状态为rejected
+            throw 'Error' // 状态为rejected
         })
 
-        console.log(p)
-
-        // p.then(res => {
-        //     console.log(res)
-        // })
+        p.then(res => {
+            console.log(res) // 输出promiseResult中的结果
+        })
     </script>
 </head>
 <body>

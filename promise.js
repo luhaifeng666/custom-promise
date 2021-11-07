@@ -31,4 +31,14 @@ function Promise(executor) {
 	}
 }
 
-Promise.prototype.then = function (onResolved, onRejected) {}
+Promise.prototype.then = function (onResolved, onRejected) {
+	// 状态为fulfilled时调用onResolved方法
+	if (this.promiseState === 'fulfilled') {
+		onResolved(this.promiseResult)
+	}
+
+	// 状态为rejected时调用onRejected方法
+	if (this.promiseState === 'rejected') {
+		onResolved(this.promiseResult)
+	}
+}
