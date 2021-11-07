@@ -41,19 +41,36 @@ function Promise(executor) {
 }
 
 Promise.prototype.then = function (onResolved, onRejected) {
-	// 状态为fulfilled时调用onResolved方法
-	if (this.promiseState === 'fulfilled') {
-		onResolved(this.promiseResult)
-	}
+	return new Promise((resolve, reject) => {
+		// 状态为fulfilled时调用onResolved方法
+		if (this.promiseState === 'fulfilled') {
+			try {
+				const result = onResolved(this.promiseResult)
+				if (result instanceof Promise) {
+					// 如果返回值是promise，则将promise的结果作为返回值
+					result.then(data => {
+						resolve(data)
+					}, err => {
+						reject(err)
+					})
+				} else {
+					// 否则直接返回
+					resolve(result)
+				}
+			} catch (e) {
+				reject(e)
+			}
+		}
 
-	// 状态为rejected时调用onRejected方法
-	if (this.promiseState === 'rejected') {
-		onRejected(this.promiseResult)
-	}
+		// 状态为rejected时调用onRejected方法
+		if (this.promiseState === 'rejected') {
+			onRejected(this.promiseResult)
+		}
 
-	// 状态为pending时，需要保存回调
-	if (this.promiseState === 'pending') {
-		// 保存回调状态
-		this.callbackList.push({ onResolved, onRejected })
-	}
+		// 状态为pending时，需要保存回调
+		if (this.promiseState === 'pending') {
+			// 保存回调状态
+			this.callbackList.push({ onResolved, onRejected })
+		}
+	})
 }
