@@ -43,10 +43,10 @@ function Promise(executor) {
 Promise.prototype.then = function (onResolved, onRejected) {
 	const self = this
 	return new Promise((resolve, reject) => {
-		// 状态为fulfilled时调用onResolved方法
-		if (this.promiseState === 'fulfilled') {
+		// 封装函数调用
+		function callback(type) {
 			try {
-				const result = onResolved(this.promiseResult)
+				const result = type(self.promiseResult)
 				if (result instanceof Promise) {
 					// 如果返回值是promise，则将promise的结果作为返回值
 					result.then(data => {
@@ -62,25 +62,14 @@ Promise.prototype.then = function (onResolved, onRejected) {
 				reject(e)
 			}
 		}
+		// 状态为fulfilled时调用onResolved方法
+		if (this.promiseState === 'fulfilled') {
+			callback(onResolved)
+		}
 
 		// 状态为rejected时调用onRejected方法
 		if (this.promiseState === 'rejected') {
-			try {
-				const result = onRejected(this.promiseResult)
-				if (result instanceof Promise) {
-					// 如果返回值是promise，则将promise的结果作为返回值
-					result.then(data => {
-						resolve(data)
-					}, err => {
-						reject(err)
-					})
-				} else {
-					// 否则直接返回
-					resolve(result)
-				}
-			} catch (e) {
-				reject(e)
-			}
+			callback(onRejected)
 		}
 
 		// 状态为pending时，需要保存回调
@@ -88,36 +77,10 @@ Promise.prototype.then = function (onResolved, onRejected) {
 			// 保存回调状态
 			this.callbackList.push({
 				onResolved: function () {
-					try {
-						const res = onResolved(self.promiseResult)
-						if (res instanceof Promise) {
-							res.then(dt => {
-								resolve(dt)
-							}, err => {
-								reject(err)
-							})
-						} else {
-							resolve(res)
-						}
-					} catch (e) {
-						reject(e)
-					}
+					callback(onResolved)
 				},
 				onRejected: function () {
-					try {
-						const res = onRejected(self.promiseResult)
-						if (res instanceof Promise) {
-							res.then(dt => {
-								resolve(dt)
-							}, err => {
-								reject(err)
-							})
-						} else {
-							resolve(res)
-						}
-					} catch (e) {
-						reject(e)
-					}
+					callback(onRejected)
 				}
 			})
 		}

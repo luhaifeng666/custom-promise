@@ -3,10 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <title>Promise test</title>
-<!--    <script src="./promise.js"></script>-->
+    <script src="./promise.js"></script>
     <script>
         const p = new Promise((resolve, reject) => {
-            reject('error')
+            setTimeout(() => {
+                reject('error')
+            }, 1000)
         })
 
         const data = p.then(res => {
