@@ -125,8 +125,7 @@ Promise.reject = function (value) {
 
 // 实现all方法
 Promise.all = function(arr) {
-	// 判断arr是否是个数组
-	if (!Array.isArray(arr) || arr.some(item => !(item instanceof Promise))) return Promise.reject(arr)
+	if (!isPromiseArray(arr)) return Promise.reject(arr)
 	return new Promise((resolve, reject) => {
 		// 添加resolve数量标记
 		let count = 0
@@ -148,4 +147,25 @@ Promise.all = function(arr) {
 			})
 		})
 	})
+}
+
+// 实现race方法
+Promise.race = function(arr) {
+	if (!isPromiseArray(arr)) return Promise.reject(arr)
+	return new Promise((resolve, reject) => {
+		arr.forEach(item => {
+			item.then(res => {
+				// 第一个执行完成后是成功状态，race的结果就是成功，直接改变状态为resolved
+				resolve(res)
+			}, err => {
+				// 第一个执行完成后是失败状态，则race的结果就是失败，直接改变为rejected状态
+				reject(err)
+			})
+		})
+	})
+}
+
+// 判断arr是否是个Promise数组
+function isPromiseArray (arr) {
+	return Array.isArray(arr) && arr.every(item => item instanceof Promise)
 }
