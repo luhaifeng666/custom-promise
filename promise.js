@@ -14,8 +14,11 @@ function Promise(executor) {
 		// 保存结果值
 		self.promiseResult = data
 		// 如果当前callbackList中存在onResolved方法，取出来执行
-		self.callbackList.forEach(item => {
-			item.onResolved(data)
+		setTimeout(() => {
+			// 根据EventLoop，then方法应该是微任务，是异步的
+			self.callbackList.forEach(item => {
+				item.onResolved(data)
+			})
 		})
 	}
 
@@ -28,8 +31,11 @@ function Promise(executor) {
 		// 保存结果值
 		self.promiseResult = data
 		// 如果当前callbackList中存在onRejected方法，取出来执行
-		self.callbackList.forEach(item => {
-			item.onRejected(data)
+		setTimeout(() => {
+			// 根据EventLoop，then方法应该是微任务，是异步的
+			self.callbackList.forEach(item => {
+				item.onRejected(data)
+			})
 		})
 	}
 	// 使用抛出异常打断Promise执行的处理
@@ -72,12 +78,18 @@ Promise.prototype.then = function (onResolved, onRejected) {
 		}
 		// 状态为fulfilled时调用onResolved方法
 		if (this.promiseState === 'fulfilled') {
-			callback(onResolved)
+			// 根据EventLoop，then方法应该是微任务，是异步的
+			setTimeout(() => {
+				callback(onResolved)
+			})
 		}
 
 		// 状态为rejected时调用onRejected方法
 		if (this.promiseState === 'rejected') {
-			callback(onRejected)
+			// 根据EventLoop，then方法应该是微任务，是异步的
+			setTimeout(() => {
+				callback(onRejected)
+			})
 		}
 
 		// 状态为pending时，需要保存回调
