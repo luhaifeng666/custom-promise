@@ -115,3 +115,10 @@ Promise.resolve = function (value) {
 		}
 	})
 }
+
+// 实现reject方法
+Promise.reject = function (value) {
+	return new Promise((resolve, reject) => {
+		reject(value)
+	})
+}
