@@ -42,6 +42,14 @@ function Promise(executor) {
 
 Promise.prototype.then = function (onResolved, onRejected) {
 	const self = this
+	// 如果没有传入onResolved方法，需要指定默认值
+	if (typeof onResolved !== 'function') {
+		onResolved = res => res
+	}
+	// 如果没有传入onRejected方法，需要指定默认值
+	if (typeof onRejected !== 'function') {
+		onRejected = res => res
+	}
 	return new Promise((resolve, reject) => {
 		// 封装函数调用
 		function callback(type) {
@@ -85,4 +93,9 @@ Promise.prototype.then = function (onResolved, onRejected) {
 			})
 		}
 	})
+}
+
+// 实现catch方法
+Promise.prototype.catch = function (onRejected) {
+	this.then(undefined, onRejected)
 }
