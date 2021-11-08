@@ -5,18 +5,8 @@
     <title>Promise test</title>
     <script src="./promise.js"></script>
     <script>
-        const p = new Promise((resolve, reject) => {
-            setTimeout(() => {
-                reject('error')
-            }, 1000)
-        })
-
-        const data = p.then(res => {
-            console.log(res) // 输出promiseResult中的结果
-        }, err => {
-            throw 'error'
-        })
-        console.log(data, '/////data///')
+        const res = Promise.all(111)
+        console.log(res)
     </script>
 </head>
 <body>

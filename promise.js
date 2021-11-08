@@ -122,3 +122,30 @@ Promise.reject = function (value) {
 		reject(value)
 	})
 }
+
+// 实现all方法
+Promise.all = function(arr) {
+	// 判断arr是否是个数组
+	if (!Array.isArray(arr) || arr.some(item => !(item instanceof Promise))) return Promise.reject(arr)
+	return new Promise((resolve, reject) => {
+		// 添加resolve数量标记
+		let count = 0
+		// 添加返回值数组
+		let resArr = []
+		// 遍历arr数组
+		arr.forEach((item, index) => {
+			item.then(res => {
+				// 增加resolve的数量
+				count ++
+				// 将结果按照原先的顺序存入数组
+				resArr[index] = res
+				// 如果全部都是resolve的状态，则返回结果
+				if (count === arr.length) {
+					resolve(resArr)
+				}
+			}, err => {
+				reject(err)
+			})
+		})
+	})
+}
