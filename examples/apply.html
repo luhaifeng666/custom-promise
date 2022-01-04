@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>myApply</title>
+    <script src="../exercises/apply.js"></script>
+    <script>
+        var a = 1
+        function add (b, c) {
+            return this.a + b + c
+        }
+        console.log('-----调用原生apply，传入null------', add.apply(null, [1, 2]))
+        console.log('-----调用myApply，传入null------', add.myApply(null, [1, 2]))
+
+        console.log('-----调用原生apply, 传入对象------', add.apply({ a: 2 }, [1, 2]))
+        console.log('-----调用myApply，传入对象------', add.myApply({ a: 2 }, [1, 2]))
+    </script>
+</head>
+<body>
+</body>
+</html>

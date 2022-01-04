@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>myCall</title>
+  <script type="text/javascript" src="../exercises/call.js"></script>
+</head>
+<body>
+<script type="text/javascript">
+  var a = 1
+  function add (b, c) { return this.a + b + c }
+  console.log('------调用原生的call，传入null-------', add.call(null, 1, 2, 3))
+  console.log('------调用myCall，传入null-------', add.myCall(null, 1, 2, 3))
+  console.log('------调用原生的call，传入对象-------', add.call({ a: 2 }, 1, 2, 3))
+  console.log('------调用myCall，传入对象-------', add.call({ a: 2 }, 1, 2, 3))
+</script>
+</body>
+</html>
