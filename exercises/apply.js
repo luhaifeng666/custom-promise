@@ -5,8 +5,8 @@
  */
 Function.prototype.myApply = function (context, args) {
 	try {
-		// 如果传入的context是undefined/0/false/null/'', 则将执行上下文指向window
-		context = context || window
+		// 如果传入的context是null/undefined, 将context指向window
+		if ([undefined, null].includes(context)) context = window
 		// 判断传入的args是不是数组，不是数组的话要抛出错误
 		if (args && !Array.isArray(args)) throw new Error('参数列表必须是数组')
 		// 如果不是函数，则需要抛出错误
