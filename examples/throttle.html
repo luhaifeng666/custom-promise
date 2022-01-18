@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <style>
+    div { height: 200vh }
+  </style>
+</head>
+<body>
+  <div></div>
+  <script src="../exercises/throttle.js"></script>
+  <script>
+    const cb = throttle(() => { console.log('-------throttle---------') }, 1000)
+    document.addEventListener('scroll', cb)
+  </script>
+</body>
+</html>
